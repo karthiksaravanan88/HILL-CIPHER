@@ -105,7 +105,10 @@ int main()
 }
 ```
 ## OUTPUT
-<img width="401" height="134" alt="image" src="https://github.com/user-attachments/assets/aedb2b2a-dcd3-4950-a436-b5d4b0a4bf6d" />
+<img width="401" height="134" alt="486354292-d6448fb3-e5f7-471f-afb6-ec9ea92bcc6c" src="https://github.com/user-attachments/assets/a4cb9b43-55d5-45f2-869b-5c1d85ee7489" />
+
+
+
 
 
 
