@@ -1,117 +1,130 @@
-# HILL CIPHER
-HILL CIPHER
-EX. NO: 3 AIM:
+# Ex-3 IMPLEMENTATION OF HILL CIPHER
  
-
-IMPLEMENTATION OF HILL CIPHER
- 
-## To write a C program to implement the hill cipher substitution techniques.
+## AIM
+To write a C program to implement the hill cipher substitution techniques.
 
 ## DESCRIPTION:
 
-Each letter is represented by a number modulo 26. Often the simple scheme A = 0, B
-= 1... Z = 25, is used, but this is not an essential feature of the cipher. To encrypt a message, each block of n letters is  multiplied by an invertible n × n matrix, against modulus 26. To
-decrypt the message, each block is multiplied by the inverse of the m trix used for
- 
-encryption. The matrix used
- 
-for encryption is the cipher key, and it sho
- 
-ld be chosen
- 
-randomly from the set of invertible n × n matrices (modulo 26).
+Each letter is represented by a number modulo 26. Often, the simple scheme  
+A = 0, B = 1, ... Z = 25 is used, but this is not an essential feature of the cipher.
+
+To encrypt a message, each block of *n* letters is multiplied by an invertible  
+*n × n* matrix modulo 26.
+
+To decrypt the message, each block is multiplied by the inverse of the matrix  
+used for encryption.
+
+The matrix used for encryption is the cipher key, and it should be chosen  
+randomly from the set of invertible *n × n* matrices (modulo 26).
 
 
 ## ALGORITHM:
 
-STEP-1: Read the plain text and key from the user.
-
-STEP-2: Split the plain text into groups of length three.
-
-STEP-3: Arrange the keyword in a 3*3 matrix.
-
-STEP-4: Multiply the two matrices to obtain the cipher text of length three.
-
-STEP-5: Combine all these groups to get the complete cipher text.
+STEP-1: Read the plain text and key from the user. <br>
+STEP-2: Split the plain text into groups of length three. <br>
+STEP-3: Arrange the keyword in a 3*3 matrix.<br>
+STEP-4: Multiply the two matrices to obtain the cipher text of length three. <br>
+STEP-5: Combine all these groups to get the complete cipher text.<br>
 
 ## PROGRAM 
-```
-#include <stdio.h>
-#include <string.h>
+```java
+public class HillCipher {
 
-int main()
-{
-    unsigned int a[3][3] = {{6, 24, 1}, {13, 16, 10}, {20, 17, 15}}; // encryption key
-    unsigned int b[3][3] = {{8, 5, 10}, {21, 8, 21}, {21, 12, 8}};   // decryption key
-    int i, j, t;
-    unsigned int c[3], d[3];
-    char msg[4]; // buffer for 3 chars + null terminator
+    static int[][] keyMat = {
+            {1, 2, 1},
+            {2, 3, 2},
+            {2, 2, 1}
+    };
 
-    printf("Enter plain text (3 letters): ");
-    scanf("%3s", msg);
+    static int[][] invKeyMat = {
+            {-1, 0, 1},
+            { 2,-1, 0},
+            {-2, 2,-1}
+    };
 
-    // Ensure the message has exactly 3 characters
-    if (strlen(msg) != 3)
-    {
-        printf("Error: The plain text must be exactly 3 letters.\n");
-        return 1;
+    static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // Encrypt 3 characters
+    static String encode(char a, char b, char c) {
+        int posa = a - 'A';
+        int posb = b - 'A';
+        int posc = c - 'A';
+
+        int x = posa * keyMat[0][0] + posb * keyMat[1][0] + posc * keyMat[2][0];
+        int y = posa * keyMat[0][1] + posb * keyMat[1][1] + posc * keyMat[2][1];
+        int z = posa * keyMat[0][2] + posb * keyMat[1][2] + posc * keyMat[2][2];
+
+        return "" +
+                ALPHABET.charAt(x % 26) +
+                ALPHABET.charAt(y % 26) +
+                ALPHABET.charAt(z % 26);
     }
 
-    // Convert plain text to numerical values (A=0,...,Z=25)
-    for (i = 0; i < 3; i++)
-    {
-        c[i] = msg[i] - 'A';
-        printf("%d ", c[i]); // debugging: show numeric
+    // Decrypt 3 characters
+    static String decode(char a, char b, char c) {
+        int posa = a - 'A';
+        int posb = b - 'A';
+        int posc = c - 'A';
+
+        int x = posa * invKeyMat[0][0] + posb * invKeyMat[1][0] + posc * invKeyMat[2][0];
+        int y = posa * invKeyMat[0][1] + posb * invKeyMat[1][1] + posc * invKeyMat[2][1];
+        int z = posa * invKeyMat[0][2] + posb * invKeyMat[1][2] + posc * invKeyMat[2][2];
+
+        return "" +
+                ALPHABET.charAt((x % 26 + 26) % 26) +
+                ALPHABET.charAt((y % 26 + 26) % 26) +
+                ALPHABET.charAt((z % 26 + 26) % 26);
     }
 
-    // Encrypt the message using matrix 'a'
-    for (i = 0; i < 3; i++)
-    {
-        t = 0;
-        for (j = 0; j < 3; j++)
-        {
-            t += a[i][j] * c[j];
+    public static void main(String[] args) {
+
+        String msg = "SecurityLaboratory";
+        StringBuilder enc = new StringBuilder();
+        StringBuilder dec = new StringBuilder();
+
+        System.out.println("Simulation of Hill Cipher");
+        System.out.println("Input message : " + msg);
+
+        msg = msg.toUpperCase().replaceAll("\\s+", "");
+
+        // Padding with X
+        int n = msg.length() % 3;
+        if (n != 0) {
+            for (int i = 0; i < 3 - n; i++)
+                msg += "X";
         }
-        d[i] = t % 26;
-    }
 
-    // Output encrypted cipher text
-    printf("\nEncrypted Cipher Text: ");
-    for (i = 0; i < 3; i++)
-    {
-        printf("%c", d[i] + 'A');
-    }
+        System.out.println("Padded message : " + msg);
 
-    // Decrypt the message using matrix 'b'
-    for (i = 0; i < 3; i++)
-    {
-        t = 0;
-        for (j = 0; j < 3; j++)
-        {
-            t += b[i][j] * d[j];
+        // Encryption
+        for (int i = 0; i < msg.length(); i += 3) {
+            enc.append(encode(
+                    msg.charAt(i),
+                    msg.charAt(i + 1),
+                    msg.charAt(i + 2)
+            ));
         }
-        c[i] = t % 26;
-    }
 
-    // Output decrypted cipher text
-    printf("\nDecrypted Cipher Text: ");
-    for (i = 0; i < 3; i++)
-    {
-        printf("%c", c[i] + 'A');
-    }
+        System.out.println("Encoded message : " + enc);
 
-    getchar();
-    return 0;
+        // Decryption
+        for (int i = 0; i < enc.length(); i += 3) {
+            dec.append(decode(
+                    enc.charAt(i),
+                    enc.charAt(i + 1),
+                    enc.charAt(i + 2)
+            ));
+        }
+
+        System.out.println("Decoded message : " + dec);
+    }
 }
+
+
 ```
+
 ## OUTPUT
-<img width="401" height="134" alt="486354292-d6448fb3-e5f7-471f-afb6-ec9ea92bcc6c" src="https://github.com/user-attachments/assets/a4cb9b43-55d5-45f2-869b-5c1d85ee7489" />
-
-
-
-
-
+<img width="1617" height="933" alt="image" src="https://github.com/user-attachments/assets/055ceebd-565b-47b0-b32c-858aa3487c84" />
 
 ## RESULT
-The program implementing the Hill cipher for encryption and decryption has been successfully 
-executed, and the results have been verified.
+ Thus the implementation of ceasar cipher had been executed successfully.
