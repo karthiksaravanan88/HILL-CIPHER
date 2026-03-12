@@ -124,7 +124,8 @@ public class HillCipher {
 ```
 
 ## OUTPUT
-<img width="1617" height="933" alt="image" src="https://github.com/user-attachments/assets/055ceebd-565b-47b0-b32c-858aa3487c84" />
+<img width="831" height="462" alt="image" src="https://github.com/user-attachments/assets/9edc4588-08bf-4761-8625-b7cd93ae7748" />
+
 
 ## RESULT
  Thus the implementation of ceasar cipher had been executed successfully.
